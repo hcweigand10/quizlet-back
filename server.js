@@ -3,6 +3,9 @@ const path = require('path');
 // Import the ApolloServer class
 const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
+const http = require('http');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const { expressMiddleware } = require('@apollo/server/express4');
 // const { authMiddleware } = require('./utils/auth');
 
@@ -17,7 +20,7 @@ const server = new ApolloServer({
   resolvers,
   // plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
-// const httpServer = http.createServer(app);
+const httpServer = http.createServer(app);
 
 
 
@@ -25,25 +28,15 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
   await server.start();
   
-  app.use(express.urlencoded({ extended: false }));
-  app.use(express.json());
-  app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000',"https://apple-a-day-cafe.netlify.app" ]; // add deployed URL here
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.header('Access-Control-Allow-Credentials', true);
-    return next();
-  });
-  
-  app.use('/graphql', expressMiddleware(server));
+  app.use(
+    '/graphql', 
+  cors(),
+  bodyParser.json({ limit: '50mb' }),
+  expressMiddleware(server));
 
 
   db.once('open', () => {
-    app.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
     });
   });
