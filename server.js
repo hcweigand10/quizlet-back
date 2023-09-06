@@ -17,12 +17,24 @@ const server = new ApolloServer({
 
 const app = express();
 
+
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
   await server.start();
   
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
+  app.use((req, res, next) => {
+    const allowedOrigins = ['http://localhost:3000',"https://apple-a-day-cafe.netlify.app" ]; // add deployed URL here
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', true);
+    return next();
+  });
   
   app.use('/graphql', expressMiddleware(server));
 
@@ -37,7 +49,6 @@ const startApolloServer = async () => {
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
-      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
     });
   });
 };
