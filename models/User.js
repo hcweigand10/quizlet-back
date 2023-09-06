@@ -1,8 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const {deckSchema} = require("./Deck")
-
 const userSchema = new Schema({
   username: {
     type: String,
@@ -13,12 +11,12 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  decks: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Deck',
-    },
-  ],
+  // decks: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: 'Deck',
+  //   },
+  // ],
 },
 {
   toJSON: {
@@ -36,9 +34,9 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.virtual('deckCount').get(() => {
-  return this.decks.length;
-});
+// userSchema.virtual('deckCount').get(() => {
+//   return this.decks.length;
+// });
 
 const User = model('User', userSchema);
 

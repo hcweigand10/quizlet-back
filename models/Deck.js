@@ -1,35 +1,40 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
-const cardSchema = require('./Card')
-const scoreSchema = require('./Score')
+const cardSchema = require("./Card");
+const scoreSchema = require("./Score");
 
-const deckSchema = new Schema({
-  name: {
-    type: String,
-    required: true
+const deckSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    cards: [cardSchema],
+    scores: [scoreSchema],
   },
-  description: {
-    type: String,
-    required: false
-  },
-  cards: [cardSchema],
-  scores: [scoreSchema]
-
-},
-{
-  toJSON: {
-    virtuals: true
+  {
+    toJSON: {
+      virtuals: true,
+    },
   }
-})
+);
 
-deckSchema.virtual("cardCount").get(() => {
-  return this.cards.length
-})
+deckSchema.virtual("cardCount").get(function() {
+  return this.cards.length;
+});
 
-deckSchema.virtual("scoreCount").get(() => {
-  return this.scores.length
-})
+deckSchema.virtual("scoreCount").get(function() {
+  return this.scores.length;
+});
 
-const Deck = model("Deck", deckSchema)
+const Deck = model("Deck", deckSchema);
 
-module.exports = {deckSchema, Deck}
+module.exports = Deck ;

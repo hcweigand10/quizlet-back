@@ -13,12 +13,13 @@ const scoreSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-  },
+  }
 },
 {
   toJSON: {
     virtuals: true
   }
 })
+
 
 module.exports = scoreSchema

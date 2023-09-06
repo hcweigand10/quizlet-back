@@ -2,15 +2,22 @@ const typeDefs = `
   type User {
     _id: ID!
     username: String!
-    deckCount: Int
+  }
+
+  type Profile {
+    user: User
     decks: [Deck]
   }
 
   type Deck {
     _id: ID!
     name: String!
+    description: String
+    createdBy: User
     cards: [Card]
     scores: [Score]
+    cardCount: Int
+    scoreCount: Int
   }
 
   type Card {
@@ -21,27 +28,33 @@ const typeDefs = `
 
   type Score {
     _id: ID!
-    score: Number
+    score: Int
     type: String
     user: User
   }
 
+  type Auth {
+    token: ID!
+    user: User
+  }
+
   type Query {
-    profile: User
-    allDecks: [Decks]
-    deck: Deck
+    profile(userId: ID!): Profile
+    allDecks: [Deck]
+    allUsers: [User]
+    deck(deckId: ID!): Deck
   }
 
   type Mutation {
     login(username: String!, password: String!): Auth
     addUser(username: String!, password: String!): Auth
-    addDeck(name: String!, description: String): User
-    updateDeck(name: String!, description: String): User
-    removeDeck(deckId: ID!): User
-    addCard(prompt: String!, answer: String!): Deck
-    updateCard(prompt: String!, answer: String!): Deck
-    removeCard(cardId: ID!): Deck
-    addScore(deckId: ID!, score: Number!, userId: ID!): Deck
+    addDeck(name: String!, description: String!, userId: ID!): Deck
+    updateDeck(name: String!, description: String!, deckId: ID!): Deck
+    removeDeck(deckId: ID!): Deck
+    addCard(prompt: String!, answer: String!, deckId: ID!): Deck
+    updateCard(prompt: String!, answer: String!, cardId: ID!, deckId: ID!): Deck
+    removeCard(cardId: ID!, deckId: ID!): Deck
+    addScore(deckId: ID!, score: Int!, type: String!, userId: ID!): Deck
   }
 `
 
