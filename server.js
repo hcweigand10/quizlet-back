@@ -34,7 +34,6 @@ const startApolloServer = async () => {
   bodyParser.json({ limit: '50mb' }),
   expressMiddleware(server));
 
-
   db.once('open', () => {
     httpServer.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
