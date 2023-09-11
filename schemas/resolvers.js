@@ -21,6 +21,22 @@ const resolvers = {
         console.log(error)
       }
     },
+
+    me: async (parent, args, context) => {
+      try {
+        const userData = await User.findById(context.user.id)
+        if (!userData) {
+          console.log("no user with this ID");
+          throw new GraphQLError("No user with this ID");
+        } else {
+          const userDecks = await Deck.find({createdBy: new Types.ObjectId(context.user.id)})
+          return {user: userData, decks: userDecks}
+        }
+        
+      } catch (error) {
+        console.log(error)
+      }
+    },
     allDecks: async (parent, args, context) => {
       try {
         const deckData = await Deck.find({}).populate("createdBy");

@@ -40,6 +40,7 @@ const typeDefs = `
 
   type Query {
     profile(userId: ID!): Profile
+    me: Profile
     allDecks: [Deck]
     allUsers: [User]
     deck(deckId: ID!): Deck
