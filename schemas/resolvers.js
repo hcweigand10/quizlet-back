@@ -70,7 +70,7 @@ const resolvers = {
     addUser: async (parent, args) => {
       try {
         const user = await User.create(args);
-        const token = signToken(user);
+        const token = signToken(user.username, user._id);
   
         return { token, user };
         
@@ -94,7 +94,7 @@ const resolvers = {
           throw new GraphQLError("wrong password");
         }
   
-        const token = signToken(user);
+        const token = signToken(user.username, user._id);
         return { token, user };
         
       } catch (error) {
