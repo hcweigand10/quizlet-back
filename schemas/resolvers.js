@@ -57,7 +57,7 @@ const resolvers = {
     },
     deck: async (parent, args, context) => {
       try {
-        const deckData = await Deck.findById(new Types.ObjectId(args.deckId)).populate("createdBy").populate("scores");
+        const deckData = await Deck.findById(new Types.ObjectId(args.deckId)).populate("createdBy").populate("scores").populate("user");
         return deckData;
         
       } catch (error) {
