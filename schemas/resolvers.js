@@ -101,6 +101,17 @@ const resolvers = {
         console.log(error)
       }
     },
+    updateUser: async (parent, args) => {
+      try {
+        const updatedUser = await User.findByIdAndUpdate(args.userId, {
+          username: args.username,
+          icon: args.icon
+        }, {new: true})
+      return updatedUser
+      } catch (error) {
+        console.log(error)
+      }
+    },
     addDeck: async (parent, args) => {
       try {
         const user = await User.findById((args.userId))

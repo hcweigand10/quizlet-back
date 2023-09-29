@@ -17,6 +17,11 @@ const userSchema = new Schema({
   //     ref: 'Deck',
   //   },
   // ],
+  icon: {
+    type: String,
+    required: true,
+    default: "robot"
+  }
 },
 {
   toJSON: {
