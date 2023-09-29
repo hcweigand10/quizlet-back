@@ -20,7 +20,7 @@ const userSchema = new Schema({
   icon: {
     type: String,
     required: true,
-    default: "robot"
+    default: "crab"
   }
 },
 {
