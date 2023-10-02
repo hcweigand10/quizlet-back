@@ -12,7 +12,6 @@ const typeDefs = `
   }
 
   type ScoreReport {
-    _id: ID!
     name: String!
     scores: [Score]
   }
