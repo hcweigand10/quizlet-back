@@ -12,6 +12,7 @@ const typeDefs = `
   }
 
   type ScoreReport {
+    _id: ID!
     name: String!
     scores: [Score]
   }
@@ -37,7 +38,6 @@ const typeDefs = `
     _id: ID!
     score: Int
     type: String
-    deckId: ID!
     user: User
   }
 
@@ -56,7 +56,7 @@ const typeDefs = `
 
   type Mutation {
     login(username: String!, password: String!): Auth
-    addUser(username: String!, password: String!): Auth
+    addUser(username: String!, password: String!, icon: String!): Auth
     updateUser(userId: ID!, username: String!, icon: String!): User
     addDeck(name: String!, description: String!, userId: ID!): Deck
     updateDeck(name: String!, description: String!, deckId: ID!): Deck

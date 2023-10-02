@@ -16,22 +16,37 @@ const resolvers = {
           const userDecks = await Deck.find({
             createdBy: new Types.ObjectId(args.userId),
           });
-          const userScores = await Deck.aggregate([{
-            $match: {
-              "scores.user": new Types.ObjectId(args.userId) // Match parent documents with children having the attribute
-            }
-          },
-          {
-            $unwind: "$scores" // Unwind the array of matching children
-          },
-          {
-            $group: {
-              name: { $first: "$name" }, // Keep the parent's name
-              scores: { $push: "$scores" } // Push the matching children into an array
-            }
+          const userScores = await Deck.aggregate([
+            {
+              $match: {
+                "scores.user": new Types.ObjectId(args.userId), // Match parent documents with children having the attribute
+              },
+            },
+            { $unwind: "$scores" },
+            {
+              $lookup: {
+                from: "users", // The collection to join with
+                localField: "scores.user", // The field from the current collection to match
+                foreignField: "_id", // The field from the "Users" collection to match
+                as: "scores.user", // Replace the scores.user field with the matching user document
+              },
+            },
+            {
+              $unwind: "$scores", // Unwind the array of matching children
+            },
+            {
+              $group: {
+                _id: "$_id",
+                name: { $first: "$name" }, // Keep the parent's name
+                scores: { $push: "$scores" }, // Push the matching children into an array
+              },
+            },
+          ]);
+          for (const deck of userScores) {
+            deck.scores = deck.scores.map((score) => {
+              return { ...score, user: score.user[0] };
+            });
           }
-        ])
-          console.log(userScores)
           return { user: userData, decks: userDecks, scoreReports: userScores };
         }
       } catch (error) {
