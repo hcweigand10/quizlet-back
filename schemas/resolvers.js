@@ -25,13 +25,7 @@ const resolvers = {
             $unwind: "$scores" // Unwind the array of matching children
           },
           {
-            $match: {
-              "scores.user": new Types.ObjectId(args.userId) // Filter out unmatched children
-            }
-          },
-          {
             $group: {
-              _id: "$_id",              // Group by parent's _id
               name: { $first: "$name" }, // Keep the parent's name
               scores: { $push: "$scores" } // Push the matching children into an array
             }
