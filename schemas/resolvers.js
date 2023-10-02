@@ -133,7 +133,6 @@ const resolvers = {
     },
     updateUser: async (parent, args) => {
       try {
-        console.log("update")
         const updatedUser = await User.findByIdAndUpdate(
           args.userId,
           {
