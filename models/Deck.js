@@ -27,14 +27,14 @@ const deckSchema = new Schema(
   }
 );
 
-deckSchema.virtual("cardCount").get(function() {
+deckSchema.virtual("cardCount").get(function () {
   return this.cards.length;
 });
 
-deckSchema.virtual("scoreCount").get(function() {
-  return this.scores.length;
-});
+// deckSchema.virtual("scoreCount").get(function() {
+//   return this.scores.length;
+// });
 
 const Deck = model("Deck", deckSchema);
 
-module.exports = Deck ;
+module.exports = Deck;

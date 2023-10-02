@@ -11,12 +11,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  // decks: [
-  //   {
-  //     type: Schema.Types.ObjectId,
-  //     ref: 'Deck',
-  //   },
-  // ],
   icon: {
     type: String,
     required: true,
@@ -26,7 +20,7 @@ const userSchema = new Schema({
 {
   toJSON: {
     virtuals: true
-  }
+  },
 })
 
 // hash user password
@@ -39,9 +33,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// userSchema.virtual('deckCount').get(() => {
-//   return this.decks.length;
-// });
 
 const User = model('User', userSchema);
 

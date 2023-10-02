@@ -8,6 +8,13 @@ const typeDefs = `
   type Profile {
     user: User
     decks: [Deck]
+    scoreReports: [ScoreReport]
+  }
+
+  type ScoreReport {
+    _id: ID!
+    name: String!
+    scores: [Score]
   }
 
   type Deck {
@@ -31,6 +38,7 @@ const typeDefs = `
     _id: ID!
     score: Int
     type: String
+    deckId: ID!
     user: User
   }
 

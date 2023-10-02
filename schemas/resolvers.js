@@ -16,7 +16,29 @@ const resolvers = {
           const userDecks = await Deck.find({
             createdBy: new Types.ObjectId(args.userId),
           });
-          return { user: userData, decks: userDecks };
+          const userScores = await Deck.aggregate([{
+            $match: {
+              "scores.user": new Types.ObjectId(args.userId) // Match parent documents with children having the attribute
+            }
+          },
+          {
+            $unwind: "$scores" // Unwind the array of matching children
+          },
+          {
+            $match: {
+              "scores.user": new Types.ObjectId(args.userId) // Filter out unmatched children
+            }
+          },
+          {
+            $group: {
+              _id: "$_id",              // Group by parent's _id
+              name: { $first: "$name" }, // Keep the parent's name
+              scores: { $push: "$scores" } // Push the matching children into an array
+            }
+          }
+        ])
+          console.log(userScores)
+          return { user: userData, decks: userDecks, scoreReports: userScores };
         }
       } catch (error) {
         console.log(error);
@@ -242,6 +264,7 @@ const resolvers = {
           score: args.score,
           type: args.type,
           user: new Types.ObjectId(args.userId),
+          // deck: new Types.ObjectId(args.deckId)
         };
         const deckData = await Deck.findOneAndUpdate(
           { _id: new Types.ObjectId(args.deckId) },
