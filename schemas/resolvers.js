@@ -141,7 +141,8 @@ const resolvers = {
           },
           { new: true }
         );
-        return updatedUser;
+        const token = signToken(user.username, user._id);
+        return { token, user: updatedUser };
       } catch (error) {
         console.log(error);
       }

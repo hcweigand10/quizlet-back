@@ -57,7 +57,7 @@ const typeDefs = `
   type Mutation {
     login(username: String!, password: String!): Auth
     addUser(username: String!, password: String!, icon: String!): Auth
-    updateUser(userId: ID!, username: String, icon: String): User
+    updateUser(userId: ID!, username: String, icon: String): Auth
     addDeck(name: String!, description: String!, userId: ID!): Deck
     updateDeck(name: String!, description: String!, deckId: ID!): Deck
     removeDeck(deckId: ID!): Deck
